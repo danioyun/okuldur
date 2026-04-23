@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/favicon.ico">
+  <title>Kayıt Başvurusu | Necmettin Erbakan İMHP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/site.css">
+  <style>
+    .kayit-wrap { max-width: 800px; margin: 0 auto; padding: 48px 5% 80px; }
+
+    /* Countdown bar */
+    .sinav-bar {
+      background: var(--navy-light); border-bottom: 1px solid var(--border);
+      padding: 14px 10%; display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .sbar-info strong { font-family: 'Cinzel', serif; font-size: .82rem; color: var(--gold); display: block; }
+    .sbar-info span { font-size: .68rem; color: var(--muted); }
+    .sbar-cd { display: flex; gap: 6px; align-items: center; }
+    .cdbox { background: var(--navy); border: 1px solid var(--border); padding: 5px 9px; text-align: center; min-width: 42px; }
+    .cdbox strong { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--white); display: block; line-height: 1; }
+    .cdbox small { font-size: .48rem; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
+    .cdsep { color: var(--gold); font-weight: 700; }
+
+    /* Step bar */
+    .steps {
+      display: flex; align-items: center; gap: 0;
+      background: var(--navy-mid); border: 1px solid var(--border);
+      padding: 16px 22px; margin-bottom: 24px;
+    }
+    .step { display: flex; align-items: center; gap: 10px; flex: 1; }
+    .step-dot { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; transition: .3s; font-family: 'Cinzel', serif; }
+    .step-dot.active { background: var(--gold); color: var(--navy); box-shadow: 0 4px 14px rgba(201,168,76,.35); }
+    .step-dot.done { background: #22c55e; color: #fff; }
+    .step-dot.idle { background: var(--navy); border: 1.5px solid var(--muted); color: var(--muted); }
+    .step-lbl { font-size: 11.5px; font-weight: 600; color: var(--muted); line-height: 1.2; }
+    .step-lbl.active { color: var(--text); }
+    .step-lbl small { display: block; font-size: 9.5px; font-weight: 400; color: #3a4d63; }
+    .step-line { flex: 1; height: 1px; background: var(--border); margin: 0 10px; transition: background .3s; }
+    .step-line.done { background: #22c55e; }
+
+    /* Error */
+    .hata-box { background: rgba(224,40,26,.12); border: 1px solid rgba(224,40,26,.3); padding: 14px 18px; margin-bottom: 22px; display: flex; gap: 10px; font-size: 13.5px; color: #fca5a5; line-height: 1.5; animation: fadeUp .3s ease; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:none} }
+
+    /* Kart */
+    .kart { background: var(--navy-mid); border: 1px solid var(--border); margin-bottom: 16px; overflow: hidden; }
+    .kart-hdr { display: flex; align-items: center; gap: 14px; padding: 16px 22px; border-bottom: 1px solid var(--border); background: linear-gradient(to right, rgba(201,168,76,.06), transparent); }
+    .kart-num { width: 32px; height: 32px; flex-shrink: 0; background: var(--gold-dim); border: 1px solid var(--gold-ring); display: flex; align-items: center; justify-content: center; font-family: 'Cinzel', serif; font-size: 14px; font-weight: 700; color: var(--gold); }
+    .kart-ttl { font-family: 'Cinzel', serif; font-size: 14px; color: var(--white); }
+    .kart-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+    .kart-body { padding: 22px; display: flex; flex-direction: column; gap: 16px; }
+
+    /* Grid */
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+    .fg { display: flex; flex-direction: column; gap: 6px; }
+    label.lbl { font-size: .62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); display: flex; align-items: center; gap: 4px; }
+    label.lbl .req { color: var(--red); }
+
+    .inp { background: var(--navy); border: 1px solid var(--border); padding: 12px 14px; color: var(--text); font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 400; width: 100%; transition: border-color .25s, box-shadow .25s; outline: none; -webkit-appearance: none; appearance: none; }
+    .inp::placeholder { color: #2d3f56; }
+    .inp:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,.1); }
+    .inp.err { border-color: var(--red); box-shadow: 0 0 0 3px rgba(224,40,26,.1); }
+    select.inp { cursor: pointer; }
+    select.inp option { background: var(--navy-mid); }
+    .inp:disabled { opacity: .4; cursor: not-allowed; }
+    .hint { font-size: 11px; color: var(--muted); }
+    .ferr { font-size: 11.5px; color: #f87171; display: none; }
+    .ferr.on { display: block; }
+
+    /* Cinsiyet / Veli */
+    .cgrid, .vgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .cbtn, .vbtn {
+      position: relative; cursor: pointer;
+      background: var(--navy); border: 1px solid var(--border);
+      padding: 14px 12px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 5px;
+      transition: .25s; user-select: none;
+    }
+    .vbtn { flex-direction: row; justify-content: flex-start; gap: 12px; }
+    .cbtn input, .vbtn input { position: absolute; opacity: 0; pointer-events: none; }
+    .cbtn .ico, .vbtn .vico { font-size: 22px; line-height: 1; }
+    .cbtn .lbl2, .vbtn .vtxt { font-size: 12.5px; font-weight: 600; color: var(--muted); transition: color .2s; }
+    .cbtn:has(input[value="erkek"]:checked) { border-color: #22c55e; background: rgba(34,197,94,.06); }
+    .cbtn:has(input[value="erkek"]:checked) .lbl2 { color: #22c55e; }
+    .cbtn:has(input[value="kiz"]:checked) { border-color: var(--red); background: rgba(224,40,26,.06); }
+    .cbtn:has(input[value="kiz"]:checked) .lbl2 { color: #f87171; }
+    .vbtn:has(input:checked) { border-color: var(--gold); background: var(--gold-dim); }
+    .vbtn:has(input:checked) .vtxt { color: var(--gold); }
+    .kiz-warn { display: none; background: rgba(224,40,26,.1); border: 1px solid rgba(224,40,26,.25); padding: 12px 16px; font-size: 13px; color: #fca5a5; }
+
+    /* Divider */
+    .secdiv { font-size: .58rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; display: flex; align-items: center; gap: 10px; }
+    .secdiv::before, .secdiv::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* Honeypot */
+    .hp { display: none !important; visibility: hidden !important; position: absolute !important; left: -9999px !important; }
+
+    /* Submit */
+    .sub-wrap { background: var(--navy-mid); border: 1px solid var(--border); padding: 22px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .sub-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background: var(--gold); color: var(--navy); border: none; padding: 15px 28px; font-family: 'Cinzel', serif; font-size: .9rem; font-weight: 700; cursor: pointer; letter-spacing: 1.5px; transition: .3s; }
+    .sub-btn:hover:not(:disabled) { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 10px 26px rgba(201,168,76,.28); }
+    .sub-btn:disabled { background: var(--navy-light); color: var(--muted); cursor: not-allowed; transform: none; box-shadow: none; }
+    .sub-note { font-size: 11px; color: var(--muted); }
+
+    @media (max-width: 600px) { .g2 { grid-template-columns: 1fr; } .g3 { grid-template-columns: 1fr 1fr; } .kart-body { padding: 16px; } }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="/" class="nav-brand"><img src="/images/logo.png" alt="Okul Logosu" class="nav-logo"><div class="nav-brand-text"><strong>NECMETTİN ERBAKAN</strong><span>İmam Hatip Ortaokulu</span></div></a>
+    <button class="nav-hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menü"><span></span><span></span><span></span></button>
+    <div class="nav-links">
+      <a href="/kurumsal.html">Okul Hakkında</a>
+      <a href="/duyuru.html">Duyurular</a>
+      <a href="/iletisim.html">İletişim</a>
+      <a href="/kayit" class="nav-btn active">KAYIT / BAŞVURU</a>
+    </div>
+  </nav>
+
+  <!-- SINAV BANNER -->
+  <div class="sinav-bar">
+    <div class="sbar-info">
+      <strong>5. SINIF KABUL SINAVI BAŞVURUSU</strong>
+      <span>17 MAYIS 2026 — SAAT 10:00 · PROF. DR. NECMETTİN ERBAKAN İHO</span>
+    </div>
+    <div class="sbar-cd">
+      <div class="cdbox"><strong id="cdG">--</strong><small>Gün</small></div>
+      <span class="cdsep">:</span>
+      <div class="cdbox"><strong id="cdS">--</strong><small>Saat</small></div>
+      <span class="cdsep">:</span>
+      <div class="cdbox"><strong id="cdD">--</strong><small>Dak</small></div>
+    </div>
+  </div>
+
+  <div class="kayit-wrap">
+
+    <% if (typeof hata !== 'undefined' && hata) { %>
+    <div class="hata-box" role="alert"><span>⚠️</span><span><%= hata %></span></div>
+    <% } %>
+
+    <!-- STEPS -->
+    <div class="steps">
+      <div class="step"><div class="step-dot active" id="dot1">1</div><div class="step-lbl active" id="lbl1">Öğrenci<small>Kimlik & Okul</small></div></div>
+      <div class="step-line" id="sl1"></div>
+      <div class="step"><div class="step-dot idle" id="dot2">2</div><div class="step-lbl" id="lbl2">Veli<small>İletişim & Adres</small></div></div>
+      <div class="step-line" id="sl2"></div>
+      <div class="step"><div class="step-dot idle" id="dot3">3</div><div class="step-lbl" id="lbl3">Gönder<small>Onay</small></div></div>
+    </div>
+
+    <form action="/kayit" method="POST" id="mForm" novalidate autocomplete="off">
+      <input type="hidden" name="_csrf" value="<%= typeof csrfToken !== 'undefined' ? csrfToken : '' %>">
+      <div class="hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off" value=""></div>
+
+      <!-- ── BÖLÜM 1 ── -->
+      <div class="kart">
+        <div class="kart-hdr">
+          <div class="kart-num">I</div>
+          <div><div class="kart-ttl">Öğrenci Bilgileri</div><div class="kart-sub">Kimlik, cinsiyet ve okul bilgileri</div></div>
+        </div>
+        <div class="kart-body">
+          <div class="g2">
+            <div class="fg"><label class="lbl" for="ad">Ad <span class="req">*</span></label><input type="text" name="ad" id="ad" class="inp" required placeholder="Ahmet" maxlength="50" autocomplete="off" value="<%= typeof form!=='undefined'&&form.ad?form.ad:'' %>"></div>
+            <div class="fg"><label class="lbl" for="soyad">Soyad <span class="req">*</span></label><input type="text" name="soyad" id="soyad" class="inp" required placeholder="Yılmaz" maxlength="50" autocomplete="off" value="<%= typeof form!=='undefined'&&form.soyad?form.soyad:'' %>"></div>
+          </div>
+          <div class="g2">
+            <div class="fg"><label class="lbl" for="tc">T.C. Kimlik No <span class="req">*</span></label><input type="text" name="tc" id="tc" class="inp" required maxlength="11" minlength="11" placeholder="11 haneli TC kimlik no" inputmode="numeric" autocomplete="off" value="<%= typeof form!=='undefined'&&form.tc?form.tc:'' %>"><span class="ferr" id="tc-err">Geçerli bir T.C. No giriniz.</span></div>
+            <div class="fg"><label class="lbl" for="dob">Doğum Tarihi <span class="req">*</span></label><input type="date" name="dogum_tarihi" id="dob" class="inp" required min="2000-01-01" max="2019-12-31" value="<%= typeof form!=='undefined'&&form.dogum_tarihi?form.dogum_tarihi:'' %>"><span class="ferr" id="dob-err">7 yaş ve üzeri olmalıdır.</span></div>
+          </div>
+          <div class="fg">
+            <label class="lbl">Cinsiyet <span class="req">*</span></label>
+            <div class="cgrid">
+              <label class="cbtn"><input type="radio" name="cinsiyet" value="erkek" id="r_erkek" required <%= typeof form!=='undefined'&&form.cinsiyet==='erkek'?'checked':'' %>><span class="ico">👦</span><span class="lbl2">Erkek</span></label>
+              <label class="cbtn"><input type="radio" name="cinsiyet" value="kiz" id="r_kiz" <%= typeof form!=='undefined'&&form.cinsiyet==='kiz'?'checked':'' %>><span class="ico">👧</span><span class="lbl2">Kız</span></label>
+            </div>
+            <div class="kiz-warn" id="kizWarn">⚠️ Okulumuzda yalnızca <strong>erkek öğrenci</strong> bölümü bulunmaktadır.</div>
+          </div>
+          <div class="secdiv">Okul Bilgileri</div>
+          <div class="fg"><label class="lbl" for="ilkokul">Okuduğu İlkokul <span class="req">*</span></label><input type="text" name="ilkokul_adi" id="ilkokul" class="inp" required placeholder="Atatürk İlkokulu" maxlength="150" autocomplete="off" value="<%= typeof form!=='undefined'&&form.ilkokul_adi?form.ilkokul_adi:'' %>"><span class="hint">Öğrencinin şu an devam ettiği ilkokulun tam adı</span></div>
+        </div>
+      </div>
+
+      <!-- ── BÖLÜM 2 ── -->
+      <div class="kart">
+        <div class="kart-hdr">
+          <div class="kart-num">II</div>
+          <div><div class="kart-ttl">Veli Bilgileri</div><div class="kart-sub">İletişim ve adres bilgileri</div></div>
+        </div>
+        <div class="kart-body">
+          <div class="fg">
+            <label class="lbl">Veli <span class="req">*</span></label>
+            <div class="vgrid">
+              <label class="vbtn"><input type="radio" name="veli_turu" value="anne" id="r_anne" <%= typeof form!=='undefined'&&form.veli_turu==='anne'?'checked':'' %>><span class="vico">👩</span><span class="vtxt">Anne</span></label>
+              <label class="vbtn"><input type="radio" name="veli_turu" value="baba" id="r_baba" <%= typeof form!=='undefined'&&form.veli_turu==='baba'?'checked':'' %>><span class="vico">👨</span><span class="vtxt">Baba</span></label>
+            </div>
+          </div>
+          <div class="g2">
+            <div class="fg"><label class="lbl" for="v_ad">Veli Adı <span class="req">*</span></label><input type="text" name="veli_ad" id="v_ad" class="inp" required placeholder="Adı" maxlength="50" autocomplete="off" value="<%= typeof form!=='undefined'&&form.veli_ad?form.veli_ad:'' %>"></div>
+            <div class="fg"><label class="lbl" for="v_soyad">Veli Soyadı <span class="req">*</span></label><input type="text" name="veli_soyad" id="v_soyad" class="inp" required placeholder="Soyadı" maxlength="50" autocomplete="off" value="<%= typeof form!=='undefined'&&form.veli_soyad?form.veli_soyad:'' %>"></div>
+          </div>
+          <div class="g2">
+            <div class="fg"><label class="lbl" for="anne_ad">Anne Adı</label><input type="text" name="anne_ad" id="anne_ad" class="inp" placeholder="Annenin adı" maxlength="50" autocomplete="off" value="<%= typeof form!=='undefined'&&form.anne_ad?form.anne_ad:'' %>"></div>
+            <div class="fg"><label class="lbl" for="baba_ad">Baba Adı</label><input type="text" name="baba_ad" id="baba_ad" class="inp" placeholder="Babanın adı" maxlength="50" autocomplete="off" value="<%= typeof form!=='undefined'&&form.baba_ad?form.baba_ad:'' %>"></div>
+          </div>
+          <div class="fg"><label class="lbl" for="meslek">Veli Mesleği</label><input type="text" name="meslek" id="meslek" class="inp" placeholder="Öğretmen, Memur, Esnaf..." maxlength="100" value="<%= typeof form!=='undefined'&&form.meslek?form.meslek:'' %>"></div>
+          <div class="secdiv">İletişim</div>
+          <div class="g2">
+            <div class="fg"><label class="lbl" for="tel">Telefon <span class="req">*</span></label><input type="tel" name="telefon" id="tel" class="inp" required placeholder="05xx xxx xx xx" maxlength="20" inputmode="numeric" value="<%= typeof form!=='undefined'&&form.telefon?form.telefon:'' %>"><span class="ferr" id="tel-err">Geçerli telefon giriniz.</span></div>
+            <div class="fg"><label class="lbl" for="eposta">E-Posta</label><input type="email" name="eposta" id="eposta" class="inp" placeholder="ornek@mail.com" maxlength="150" value="<%= typeof form!=='undefined'&&form.eposta?form.eposta:'' %>"></div>
+          </div>
+          <div class="secdiv">Adres</div>
+          <div class="fg"><label class="lbl" for="ilce">İlçe <span class="req">*</span></label><select name="ilce" id="ilce" class="inp" required><option value="">Yükleniyor...</option></select><input type="hidden" name="il" value="Sanliurfa"></div>
+          <div class="fg"><label class="lbl" for="acik_adres">Açık Adres <span class="req">*</span></label><input type="text" name="acik_adres" id="acik_adres" class="inp" required placeholder="Cadde, sokak adı..." maxlength="200" value="<%= typeof form!=='undefined'&&form.acik_adres?form.acik_adres:'' %>"></div>
+          <div class="g3">
+            <div class="fg"><label class="lbl" for="bina_no">Bina No</label><input type="text" name="bina_no" id="bina_no" class="inp" placeholder="No" maxlength="10" value="<%= typeof form!=='undefined'&&form.bina_no?form.bina_no:'' %>"></div>
+            <div class="fg"><label class="lbl" for="daire_no">Daire</label><input type="text" name="daire_no" id="daire_no" class="inp" placeholder="D." maxlength="10" value="<%= typeof form!=='undefined'&&form.daire_no?form.daire_no:'' %>"></div>
+            <div class="fg"><label class="lbl" for="posta_kodu">Posta Kodu</label><input type="text" name="posta_kodu" id="posta_kodu" class="inp" placeholder="63xxx" maxlength="5" inputmode="numeric" value="<%= typeof form!=='undefined'&&form.posta_kodu?form.posta_kodu:'' %>"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── GÖNDER ── -->
+      <div class="sub-wrap">
+        <button type="submit" class="sub-btn" id="subBtn">
+          <span id="btnTxt">BAŞVURUYU TAMAMLA</span>
+          <span id="btnIco">→</span>
+        </button>
+        <p class="sub-note">🔒 Bilgileriniz güvenli şekilde iletilmektedir · Sınav: 17 Mayıs 2026 · Saat 10:00</p>
+      </div>
+    </form>
+
+  </div><!-- /kayit-wrap -->
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand"><strong>NECMETTİN ERBAKAN İMHP</strong><p>"Önce Ahlak ve Maneviyat" düsturunu rehber edinerek nesiller yetiştiriyoruz.</p></div>
+      <div class="footer-col"><h5>Sayfalar</h5><ul><li><a href="/">Anasayfa</a></li><li><a href="/kurumsal.html">Okul Hakkında</a></li><li><a href="/duyuru.html">Duyurular</a></li><li><a href="/iletisim.html">İletişim</a></li></ul></div>
+      <div class="footer-col"><h5>Başvuru</h5><ul><li><a href="/kayit">Kayıt Formu</a></li><li><a href="/admin">Yönetim Paneli</a></li></ul></div>
+      <div class="footer-col"><h5>İletişim</h5><ul><li><a href="#">+90 (414) 312 70 37</a></li><li><a href="#">Haliliye / Şanlıurfa</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 NECMETTİN ERBAKAN İMHP</span><span>Sistem Geliştirici: Fatih Kılıç</span></div>
+  </footer>
+
+<script>
+(function(){
+'use strict';
+const AD=<%- JSON.stringify(adresData) %>;
+const ilceEl=document.getElementById('ilce');
+const urfaD=AD['Sanliurfa']||AD['Şanlıurfa']||AD['SANLIURFA'];
+const btn=document.getElementById('subBtn');
+
+// Geri sayım
+(function(){
+  const hedef=new Date('2026-05-17T10:00:00+03:00');
+  function g(){
+    const f=hedef-new Date();
+    if(f<=0){['cdG','cdS','cdD'].forEach(id=>document.getElementById(id).textContent='00');return;}
+    document.getElementById('cdG').textContent=String(Math.floor(f/864e5)).padStart(2,'0');
+    document.getElementById('cdS').textContent=String(Math.floor((f%864e5)/36e5)).padStart(2,'0');
+    document.getElementById('cdD').textContent=String(Math.floor((f%36e5)/6e4)).padStart(2,'0');
+  }
+  g();setInterval(g,30000);
+})();
+
+function tcOk(tc){
+  if(!/^\d{11}$/.test(tc)||tc[0]==='0')return false;
+  const d=tc.split('').map(Number);
+  const t=d[0]+d[2]+d[4]+d[6]+d[8],c=d[1]+d[3]+d[5]+d[7];
+  if((t*7-c+1000)%10!==d[9])return false;
+  return d.slice(0,10).reduce((a,b)=>a+b,0)%10===d[10];
+}
+
+function loadIlce(){
+  ilceEl.innerHTML='<option value="">İlçe Seçiniz</option>';
+  if(urfaD)Object.keys(urfaD).sort().forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=k;ilceEl.appendChild(o);});
+  const pI='<%= typeof form!=="undefined"&&form.ilce?form.ilce:"" %>';
+  if(pI){ilceEl.value=pI;}
+}
+ilceEl.addEventListener('change',()=>{});
+
+document.getElementById('tc').addEventListener('input',function(){
+  this.value=this.value.replace(/\D/g,'').substring(0,11);
+  const e=document.getElementById('tc-err');
+  if(this.value.length===11){if(!tcOk(this.value)){this.classList.add('err');e.classList.add('on');}else{this.classList.remove('err');e.classList.remove('on');}}
+  else{this.classList.remove('err');e.classList.remove('on');}
+});
+
+document.getElementById('tel').addEventListener('input',function(){
+  let r=this.value.replace(/\D/g,'').substring(0,20);
+  let x=r.match(/(\d{0,4})(\d{0,3})(\d{0,2})(\d{0,2})/);
+  this.value=!x[2]?x[1]:x[1]+' '+x[2]+(x[3]?' '+x[3]:'')+(x[4]?' '+x[4]:'');
+});
+
+document.querySelectorAll('input[name="cinsiyet"]').forEach(r=>{
+  r.addEventListener('change',()=>{
+    const kiz=document.getElementById('r_kiz').checked;
+    document.getElementById('kizWarn').style.display=kiz?'block':'none';
+    btn.disabled=kiz;
+  });
+});
+
+function steps(){
+  const s1=['ad','soyad','tc','dob'].every(id=>{const el=document.getElementById(id);return el&&el.value.trim();});
+  const s2=['v_ad','v_soyad','tel'].every(id=>{const el=document.getElementById(id);return el&&el.value.trim();});
+  const d1=document.getElementById('dot1'),d2=document.getElementById('dot2'),d3=document.getElementById('dot3');
+  const l2=document.getElementById('lbl2'),l3=document.getElementById('lbl3');
+  const ln1=document.getElementById('sl1'),ln2=document.getElementById('sl2');
+  if(s1&&s2){d1.className='step-dot done';d1.textContent='✓';d2.className='step-dot done';d2.textContent='✓';d3.className='step-dot active';l2.classList.add('active');l3.classList.add('active');ln1.classList.add('done');ln2.classList.add('done');}
+  else if(s1){d1.className='step-dot done';d1.textContent='✓';d2.className='step-dot active';d3.className='step-dot idle';l2.classList.add('active');l3.classList.remove('active');ln1.classList.add('done');ln2.classList.remove('done');}
+  else{d1.className='step-dot active';d1.textContent='1';d2.className='step-dot idle';d3.className='step-dot idle';l2.classList.remove('active');l3.classList.remove('active');ln1.classList.remove('done');ln2.classList.remove('done');}
+}
+['ad','soyad','tc','dob','v_ad','v_soyad','tel'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('input',steps);});
+
+const t0=Date.now();
+document.getElementById('mForm').addEventListener('submit',function(e){
+  const hp=this.querySelector('input[name="website"]');
+  if(hp&&hp.value){e.preventDefault();return;}
+  if(Date.now()-t0<3000){e.preventDefault();return;}
+  let ok=true;
+  const tcEl=document.getElementById('tc');
+  if(!tcOk(tcEl.value)){tcEl.classList.add('err');document.getElementById('tc-err').classList.add('on');ok=false;}
+  const dEl=document.getElementById('dob');
+  if(dEl.value){const d=new Date(dEl.value),b=new Date();let y=b.getFullYear()-d.getFullYear();if(b.getMonth()<d.getMonth()||(b.getMonth()===d.getMonth()&&b.getDate()<d.getDate()))y--;if(isNaN(y)||y<7){dEl.classList.add('err');document.getElementById('dob-err').classList.add('on');ok=false;}}
+  if(!ok){e.preventDefault();const f=document.querySelector('.inp.err');if(f)f.scrollIntoView({behavior:'smooth',block:'center'});return;}
+  btn.disabled=true;document.getElementById('btnTxt').textContent='GÖNDERİLİYOR...';document.getElementById('btnIco').textContent='⏳';
+});
+
+window.addEventListener('load',loadIlce);
+steps();
+})();
+</script>
+</body>
+</html>

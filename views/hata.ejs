@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/favicon.ico">
+  <title>Hata | Necmettin Erbakan İMHP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/site.css">
+  <style>
+    body { display:flex; align-items:center; justify-content:center; min-height:100vh; text-align:center; padding:20px; }
+    .err-box { max-width:500px; }
+    .err-code { font-family:'Cinzel',serif; font-size:5rem; color:var(--gold); line-height:1; opacity:.25; }
+    .err-title { font-family:'Cinzel',serif; font-size:1.4rem; color:var(--white); margin:16px 0 10px; }
+    .err-msg { font-size:.88rem; color:var(--muted); margin-bottom:28px; line-height:1.6; }
+  </style>
+</head>
+<body>
+<div class="err-box">
+  <div class="err-code">!</div>
+  <h1 class="err-title">Bir Hata Oluştu</h1>
+  <p class="err-msg"><%= mesaj || 'Sayfa bulunamadı veya bir hata oluştu.' %></p>
+  <a href="/" class="btn btn-gold">ANA SAYFAYA DÖN</a>
+</div>
+</body>
+</html>

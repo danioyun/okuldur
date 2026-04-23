@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/favicon.ico">
+  <title>Yönetici Girişi | Necmettin Erbakan İMHP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/site.css">
+  <style>
+    body { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+    .login-box { width: 100%; max-width: 400px; }
+
+    .login-top { text-align: center; margin-bottom: 32px; }
+    .login-logo {
+      width: 64px; height: 64px; background: var(--gold-dim); border: 1px solid var(--border);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: 'Cinzel', serif; font-size: 1.1rem; font-weight: 700; color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .login-top h1 { font-family: 'Cinzel', serif; font-size: 1.2rem; color: var(--gold); margin-bottom: 6px; }
+    .login-top p { font-size: .72rem; color: var(--muted); letter-spacing: 1px; }
+
+    .login-card { background: var(--navy-mid); border: 1px solid var(--border); padding: 32px 28px; }
+    .login-title {
+      font-size: .68rem; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 2px;
+      text-align: center; margin-bottom: 24px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .login-title::before, .login-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    .alert-err { background: rgba(224,40,26,.12); border: 1px solid rgba(224,40,26,.25); padding: 10px 14px; margin-bottom: 20px; color: #fca5a5; font-size: .78rem; display: flex; gap: 8px; align-items: center; }
+
+    .login-submit { width: 100%; background: var(--gold); color: var(--navy); border: none; padding: 13px; font-family: 'Cinzel', serif; font-size: .82rem; font-weight: 700; letter-spacing: 2px; cursor: pointer; transition: .3s; margin-top: 6px; }
+    .login-submit:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+    .back { display: block; text-align: center; margin-top: 20px; color: var(--muted); font-size: .72rem; text-decoration: none; transition: color .25s; }
+    .back:hover { color: var(--gold); }
+
+    .security-note { margin-top: 20px; padding: 12px 16px; background: var(--gold-dim); border: 1px solid var(--border); font-size: .68rem; color: var(--muted); text-align: center; line-height: 1.6; }
+  </style>
+</head>
+<body>
+<div class="login-box">
+  <div class="login-top">
+    <div class="login-logo">MEB</div>
+    <h1>Yönetici Girişi</h1>
+    <p>Necmettin Erbakan İMHP — Admin Paneli</p>
+  </div>
+
+  <div class="login-card">
+    <div class="login-title">Giriş Bilgileri</div>
+
+    <% if (hata) { %>
+      <div class="alert-err">⛔ <%= hata %></div>
+    <% } %>
+
+    <form action="/admin" method="POST">
+      <div class="form-grp"><label>Yetkili Adı</label><input type="text" name="ad" placeholder="Adınızı giriniz" required autocomplete="off" /></div>
+      <div class="form-grp"><label>TC Kimlik No</label><input type="text" name="tc" placeholder="TC kimlik numaranız" required autocomplete="off" inputmode="numeric" /></div>
+      <div class="form-grp"><label>İl / Şehir</label><input type="text" name="adres" placeholder="Bulunduğunuz il" required autocomplete="off" /></div>
+      <button type="submit" class="login-submit">GİRİŞ YAP →</button>
+    </form>
+  </div>
+
+  <div class="security-note">🔒 Bu sayfa yetkili personele özgüdür. Yetkisiz erişim girişimleri kayıt altına alınmaktadır.</div>
+  <a href="/" class="back">← Ana Sayfaya Dön</a>
+</div>
+</body>
+</html>

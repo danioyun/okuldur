@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Okul Hakkında | Necmettin Erbakan İMHP</title>
+  <link rel="icon" href="/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/site.css">
+  <style>
+    .page-hero {
+      min-height: 52vh;
+      background:
+        linear-gradient(to right, rgba(6,16,30,.97) 40%, rgba(6,16,30,.45)),
+        url('https://images.unsplash.com/photo-1541339907198-e08756ebafe1?auto=format&fit=crop&w=1920&q=80') center/cover;
+      display: flex; align-items: center; padding: 0 10%;
+    }
+    .about-block { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center; }
+    .about-img { position: relative; }
+    .about-img img { width: 100%; height: 420px; object-fit: cover; display: block; filter: grayscale(15%); transition: filter .5s; }
+    .about-img:hover img { filter: none; }
+    .about-img::before { content:""; position:absolute; inset:-12px -12px 12px 12px; border:1px solid var(--border); z-index:-1; }
+    .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .val-card { background: var(--navy-mid); border: 1px solid var(--border); border-top: 3px solid var(--gold); padding: 36px 26px; transition: .3s; }
+    .val-card:hover { background: var(--navy-light); transform: translateY(-4px); }
+    .val-card .icon { font-size: 2rem; margin-bottom: 16px; display: block; }
+    .val-card h4 { font-family: 'Cinzel', serif; font-size: .95rem; color: var(--gold); margin-bottom: 10px; }
+    .val-card p { font-size: .82rem; color: var(--muted); line-height: 1.7; }
+    .quote-strip { background: var(--navy-light); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 70px 10%; text-align: center; }
+    .quote-strip blockquote { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.4rem,2.5vw,2rem); font-style: italic; color: var(--white); max-width: 800px; margin: 0 auto 14px; }
+    .quote-strip cite { font-size: .7rem; color: var(--gold); letter-spacing: 3px; text-transform: uppercase; font-style: normal; }
+    .cta-strip { background: linear-gradient(135deg, rgba(201,168,76,.08), var(--navy-mid)); border-top: 1px solid var(--border); padding: 70px 10%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 30px; }
+    .cta-strip h3 { font-family: 'Cinzel', serif; font-size: 1.8rem; color: var(--white); margin-bottom: 8px; }
+    .cta-strip p { font-size: .88rem; color: var(--muted); }
+    @media (max-width: 900px) { .about-block { grid-template-columns: 1fr; } .values-grid { grid-template-columns: 1fr; } .cta-strip { flex-direction: column; } }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="/" class="nav-brand"><img src="/images/logo.png" alt="Okul Logosu" class="nav-logo"><div class="nav-brand-text"><strong>NECMETTİN ERBAKAN</strong><span>İmam Hatip Ortaokulu</span></div></a>
+    <button class="nav-hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menü"><span></span><span></span><span></span></button>
+    <div class="nav-links">
+      <a href="/kurumsal.html" class="active">Okul Hakkında</a>
+      <a href="/duyuru.html">Duyurular</a>
+      <a href="/iletisim.html">İletişim</a>
+      <a href="/kayit" class="nav-btn">KAYIT / BAŞVURU</a>
+    </div>
+  </nav>
+
+  <header class="page-hero">
+    <div>
+      <span class="tag">Kurumsal Kimlik</span>
+      <h1 class="title" style="font-size:clamp(2rem,5vw,3.8rem);max-width:580px;">
+        Gelenekten Geleceğe<br><em>Bir İlim Köprüsü</em>
+      </h1>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="about-block">
+      <div class="about-img reveal">
+        <img src="https://images.unsplash.com/photo-1588072432836-e10032774350?auto=format&fit=crop&w=900&q=80" alt="Okul">
+      </div>
+      <div class="reveal">
+        <span class="tag">Hakkımızda</span>
+        <h2 class="title">Akademik Ciddiyet<br>ve Manevi Miras</h2>
+        <div class="divider"></div>
+        <p class="lead">Necmettin Erbakan İmam Hatip Ortaokulu olarak amacımız; fenni ilimlerde donanımlı, ahlak ve maneviyat bakımından güçlü, millî şuurla yetişmiş bireyler kazandırmaktır.</p>
+        <br>
+        <p class="lead">Robotik laboratuvarlarından hafızlık programına, LGS hazırlığından hat sanatına kadar öğrencilerimizin tüm yönleriyle gelişmesini hedefliyoruz.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="quote-strip reveal">
+    <blockquote>"Önce Ahlak ve Maneviyat"</blockquote>
+    <cite>— Prof. Dr. Necmettin Erbakan</cite>
+  </div>
+
+  <section class="section" style="background:var(--navy-mid);">
+    <div style="text-align:center;margin-bottom:50px;" class="reveal">
+      <span class="tag">Eğitim Anlayışımız</span>
+      <h2 class="title" style="text-align:center;">Temel Değerlerimiz</h2>
+    </div>
+    <div class="values-grid">
+      <div class="val-card reveal"><span class="icon">📜</span><h4>Milli Şuur</h4><p>Tarihini bilen, değerlerine bağlı ve vatan sevgisiyle donanmış bir gençlik ideali.</p></div>
+      <div class="val-card reveal"><span class="icon">🔬</span><h4>Fen ve Teknoloji</h4><p>Robotik lab ve modern müfredat ile akademik başarıda öncü, LGS'ye hazır eğitim.</p></div>
+      <div class="val-card reveal"><span class="icon">🌙</span><h4>Manevi Eğitim</h4><p>Hafızlık ve dini ilimlerle ruhunu besleyen, güzel ahlaklı bireylerin yetiştiği yuva.</p></div>
+      <div class="val-card reveal"><span class="icon">🎨</span><h4>Sanat ve Spor</h4><p>Hat sanatı, münazara, satranç ve spor branşlarıyla öğrencinin her yönü gelişiyor.</p></div>
+      <div class="val-card reveal"><span class="icon">🤝</span><h4>Sosyal Sorumluluk</h4><p>Toplum hizmetleri ve yardım projeleriyle empati ve liderlik becerileri kazandırılıyor.</p></div>
+      <div class="val-card reveal"><span class="icon">👨‍👩‍👧</span><h4>Aile Ortaklığı</h4><p>Düzenli veli toplantıları ve dijital takip sistemiyle okul-aile iş birliği en üst düzeyde.</p></div>
+    </div>
+  </section>
+
+  <div class="cta-strip">
+    <div>
+      <h3>5. Sınıf Kabul Sınavı</h3>
+      <p>17 Mayıs 2026 — Saat 10:00 · Başvurular açık, kontenjanlar sınırlıdır.</p>
+    </div>
+    <a href="/kayit" class="btn btn-gold">KAYIT FORMUNA GİT →</a>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand"><strong>NECMETTİN ERBAKAN İMHP</strong><p>"Önce Ahlak ve Maneviyat" düsturunu rehber edinerek, bilimde ve sanatta öncü nesiller yetiştiriyoruz.</p></div>
+      <div class="footer-col"><h5>Sayfalar</h5><ul><li><a href="/">Anasayfa</a></li><li><a href="/kurumsal.html">Okul Hakkında</a></li><li><a href="/duyuru.html">Duyurular</a></li><li><a href="/iletisim.html">İletişim</a></li></ul></div>
+      <div class="footer-col"><h5>Başvuru</h5><ul><li><a href="/kayit">Kayıt Formu</a></li><li><a href="/admin">Yönetim Paneli</a></li></ul></div>
+      <div class="footer-col"><h5>İletişim</h5><ul><li><a href="#">Selahaddin Eyyubi Mah.</a></li><li><a href="#">+90 (414) 312 70 37</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 NECMETTİN ERBAKAN İMHP</span><span>HALİLİYE / ŞANLIURFA</span></div>
+  </footer>
+
+  <script>
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const siblings = [...e.target.parentElement.querySelectorAll('.reveal')];
+          setTimeout(() => e.target.classList.add('in'), siblings.indexOf(e.target) * 90);
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
+  </script>
+</body>
+</html>

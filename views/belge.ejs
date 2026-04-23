@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/favicon.ico">
+  <title>Kayıt Başarılı | Necmettin Erbakan İMHP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/site.css">
+  <style>
+    .belge-wrap { max-width: 620px; margin: 0 auto; padding: 50px 5% 80px; }
+
+    .success-badge {
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px; font-size: .68rem; font-weight: 600; letter-spacing: 3px;
+      text-transform: uppercase; color: #22c55e;
+      background: rgba(34,197,94,.08); border: 1px solid rgba(34,197,94,.2);
+      padding: 8px 18px; margin-bottom: 24px;
+    }
+
+    .belge-title { font-family: 'Cinzel', serif; font-size: clamp(1.8rem,4vw,2.6rem); color: var(--white); margin-bottom: 10px; }
+    .belge-desc { font-size: .88rem; color: var(--muted); line-height: 1.7; margin-bottom: 36px; }
+
+    /* Sınav kutusu */
+    .sinav-box {
+      background: var(--navy-light); border: 1px solid var(--border);
+      border-top: 3px solid var(--gold);
+      padding: 24px; margin-bottom: 24px; text-align: center;
+    }
+    .sinav-box .sb-lbl { font-size: .62rem; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; }
+    .sinav-box .sb-date { font-family: 'Cinzel', serif; font-size: 1.8rem; color: var(--gold); margin: 6px 0; }
+    .sinav-box .sb-saat { font-size: .88rem; color: var(--text); font-weight: 600; }
+    .sinav-box .sb-yer { font-size: .78rem; color: var(--muted); margin-top: 6px; }
+
+    /* Info rows */
+    .info-card { background: var(--navy-mid); border: 1px solid var(--border); padding: 0 22px; margin-bottom: 20px; }
+    .info-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--border); }
+    .info-row:last-child { border-bottom: none; }
+    .info-lbl { font-size: .75rem; color: var(--muted); font-weight: 500; letter-spacing: .5px; }
+    .info-val { font-size: .88rem; color: var(--text); font-weight: 600; text-align: right; }
+    .info-val.gold { font-family: 'Cinzel', serif; color: var(--gold); font-size: 1rem; }
+
+    /* Notice */
+    .notice { background: rgba(201,168,76,.07); border: 1px solid var(--border); padding: 16px 18px; margin-bottom: 28px; display: flex; gap: 12px; align-items: flex-start; }
+    .notice p { font-size: .82rem; color: var(--muted); line-height: 1.6; }
+    .notice p strong { color: var(--gold); }
+
+    /* Action buttons */
+    .actions { display: flex; flex-direction: column; gap: 12px; }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="/" class="nav-brand"><img src="/images/logo.png" alt="Okul Logosu" class="nav-logo"><div class="nav-brand-text"><strong>NECMETTİN ERBAKAN</strong><span>İmam Hatip Ortaokulu</span></div></a>
+    <button class="nav-hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menü"><span></span><span></span><span></span></button>
+    <div class="nav-links">
+      <a href="/kurumsal.html">Okul Hakkında</a>
+      <a href="/duyuru.html">Duyurular</a>
+      <a href="/iletisim.html">İletişim</a>
+      <a href="/kayit" class="nav-btn">KAYIT / BAŞVURU</a>
+    </div>
+  </nav>
+
+  <div class="belge-wrap">
+    <div class="success-badge">✓ Kaydınız Onaylandı</div>
+    <h1 class="belge-title">Başvuru Tamamlandı!</h1>
+    <p class="belge-desc">Sınav giriş belgeniz sistem tarafından oluşturuldu. Sınav günü belgenizi ve kimliğinizi mutlaka yanınızda bulundurun.</p>
+
+    <div class="sinav-box">
+      <div class="sb-lbl">Sınav Tarihi</div>
+      <div class="sb-date">17 Mayıs 2026</div>
+      <div class="sb-saat">⏰ Saat 10:00</div>
+      <div class="sb-yer">Prof. Dr. Necmettin Erbakan İHO — Ana Sınav Salonu<br>Selahaddin Eyyubi Mah. 211. Sk. No:1, Haliliye / Şanlıurfa</div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-row"><span class="info-lbl">Kayıt No</span><span class="info-val gold"><%= kayit.kayitNo %></span></div>
+      <div class="info-row"><span class="info-lbl">Öğrenci</span><span class="info-val"><%= kayit.ad %> <%= kayit.soyad %></span></div>
+      <div class="info-row"><span class="info-lbl">Salon &amp; Sıra</span><span class="info-val" style="color:var(--gold-light);">Salon <%= kayit.sinifNo %> / Sıra <%= String(kayit.siraNo).padStart(3,'0') %></span></div>
+      <div class="info-row"><span class="info-lbl">Veli</span><span class="info-val"><%= kayit.veli_ad %> <%= kayit.veli_soyad %></span></div>
+      <div class="info-row"><span class="info-lbl">Telefon</span><span class="info-val"><%= kayit.telefon %></span></div>
+    </div>
+
+    <div class="notice">
+      <span style="font-size:1.2rem;">⚠️</span>
+      <p>Lütfen Sınav Giriş Belgesini <strong>indirip yazdırın</strong>. Sınava kimlik belgesi (Nüfus Cüzdanı) ile gelinmelidir. Sınav saatinden <strong>en az 30 dakika önce</strong> okulda hazır olunuz. Sınav giriş ücreti <strong>100 TL</strong>'dir.</p>
+    </div>
+
+    <div class="actions">
+      <a href="/pdf/<%= kayit.id %>" class="btn btn-gold" download style="text-align:center;">📄 PDF BELGESİNİ İNDİR</a>
+      <a href="/belge/<%= kayit.id %>" class="btn btn-outline" style="text-align:center;">👁 BELGEYİ GÖRÜNTÜLE</a>
+      <a href="/" class="btn btn-outline" style="text-align:center;">← ANA SAYFAYA DÖN</a>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand"><strong>NECMETTİN ERBAKAN İMHP</strong><p>"Önce Ahlak ve Maneviyat" düsturunu rehber edinerek nesiller yetiştiriyoruz.</p></div>
+      <div class="footer-col"><h5>Sayfalar</h5><ul><li><a href="/">Anasayfa</a></li><li><a href="/kurumsal.html">Okul Hakkında</a></li><li><a href="/duyuru.html">Duyurular</a></li><li><a href="/iletisim.html">İletişim</a></li></ul></div>
+      <div class="footer-col"><h5>Başvuru</h5><ul><li><a href="/kayit">Kayıt Formu</a></li><li><a href="/admin">Yönetim Paneli</a></li></ul></div>
+      <div class="footer-col"><h5>İletişim</h5><ul><li><a href="#">+90 (414) 312 70 37</a></li><li><a href="#">Haliliye / Şanlıurfa</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 NECMETTİN ERBAKAN İMHP</span><span>HALİLİYE / ŞANLIURFA</span></div>
+  </footer>
+
+</body>
+</html>

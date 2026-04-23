@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Duyurular | Necmettin Erbakan İMHP</title>
+  <link rel="icon" href="/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/site.css">
+  <style>
+    .filter-bar {
+      background: var(--navy-mid); border-bottom: 1px solid var(--border);
+      padding: 18px 10%; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    }
+    .filter-lbl { font-size:.62rem; color:var(--muted); letter-spacing:2px; text-transform:uppercase; margin-right:6px; }
+    .f-btn {
+      background: transparent; border: 1px solid var(--border);
+      color: var(--muted); padding: 7px 18px;
+      font-size: .65rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+      cursor: pointer; transition: .25s; font-family: 'Poppins', sans-serif;
+    }
+    .f-btn:hover, .f-btn.active { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+
+    .layout {
+      display: grid; grid-template-columns: 1fr 290px;
+      gap: 44px; padding: 54px 10%;
+      max-width: 1380px; margin: 0 auto;
+    }
+    .ann-list { display: flex; flex-direction: column; gap: 20px; }
+
+    .ann-card {
+      display: grid; grid-template-columns: 82px 1fr;
+      background: var(--navy-mid); border: 1px solid var(--border);
+      overflow: hidden; transition: .35s var(--ease);
+      text-decoration: none; color: var(--text);
+    }
+    .ann-card:hover { border-color: var(--gold); transform: translateX(5px); box-shadow: -3px 0 0 var(--gold); }
+    .ann-card.pinned { grid-template-columns: 1fr; background: var(--navy-light); }
+    .ann-card.sinav-card { grid-template-columns: 1fr; background: linear-gradient(135deg, rgba(201,168,76,.1), var(--navy-light)); border-color: var(--gold); }
+
+    .date-col { background: var(--gold); color: var(--navy); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px 8px; text-align: center; }
+    .date-col .d { font-family: 'Cinzel', serif; font-size: 1.7rem; font-weight: 700; line-height: 1; }
+    .date-col .m { font-size: .58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
+
+    .pin-hdr, .sinav-hdr {
+      background: transparent; border-bottom: 1px solid var(--border);
+      padding: 12px 26px; display: flex; align-items: center; gap: 10px;
+      font-size: .62rem; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--gold);
+    }
+
+    .ann-body { padding: 22px 26px; }
+    .ann-tag { display: inline-block; background: var(--gold-dim); color: var(--gold); font-size: .58rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; margin-bottom: 10px; }
+    .ann-body h3 { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--white); margin-bottom: 8px; }
+    .ann-body p { font-size: .82rem; color: var(--muted); line-height: 1.75; margin-bottom: 14px; }
+    .ann-meta { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid var(--border); font-size: .65rem; color: var(--muted); }
+    .ann-link { color: var(--gold); text-decoration: none; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+
+    /* SIDEBAR */
+    .sidebar { display: flex; flex-direction: column; gap: 26px; }
+    .widget { background: var(--navy-mid); border: 1px solid var(--border); padding: 26px; }
+    .widget-title { font-family: 'Cinzel', serif; font-size: .75rem; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .arc-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+    .arc-row:last-child { border-bottom: none; }
+    .arc-row:hover span:first-child { color: var(--gold); }
+    .arc-row span:first-child { font-size: .8rem; transition: .25s; }
+    .arc-cnt { background: var(--gold-dim); color: var(--gold); font-size: .62rem; font-weight: 700; padding: 2px 9px; border-radius: 20px; }
+    .event-row { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .event-row:last-child { border-bottom: none; }
+    .ev-date { background: var(--gold); color: var(--navy); font-family: 'Cinzel', serif; font-size: .68rem; font-weight: 700; padding: 5px 9px; line-height: 1.3; text-align: center; flex-shrink: 0; }
+    .event-row h5 { font-size: .8rem; color: var(--text); margin-bottom: 2px; }
+    .event-row p { font-size: .7rem; color: var(--muted); }
+    .widget blockquote { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-style: italic; color: var(--text); line-height: 1.7; border-left: 2px solid var(--gold); padding-left: 14px; margin-bottom: 12px; }
+    .widget cite { font-size: .62rem; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; font-style: normal; }
+
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; padding: 40px 6%; } .ann-card { grid-template-columns: 70px 1fr; } }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="/" class="nav-brand"><img src="/images/logo.png" alt="Okul Logosu" class="nav-logo"><div class="nav-brand-text"><strong>NECMETTİN ERBAKAN</strong><span>İmam Hatip Ortaokulu</span></div></a>
+    <button class="nav-hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menü"><span></span><span></span><span></span></button>
+    <div class="nav-links">
+      <a href="/kurumsal.html">Okul Hakkında</a>
+      <a href="/duyuru.html" class="active">Duyurular</a>
+      <a href="/iletisim.html">İletişim</a>
+      <a href="/kayit" class="nav-btn">KAYIT / BAŞVURU</a>
+    </div>
+  </nav>
+
+  <header class="page-hdr">
+    <div class="breadcrumb"><a href="/">Anasayfa</a> › Duyurular</div>
+    <h1 class="title">Güncel <em>Duyurular</em></h1>
+    <p style="font-size:.85rem;color:var(--muted);margin-top:8px;">Akademik, sosyal ve kurumsal tüm haberler</p>
+  </header>
+
+  <div class="filter-bar">
+    <span class="filter-lbl">Filtrele:</span>
+    <button class="f-btn active">Tümü</button>
+    <button class="f-btn">Akademik</button>
+    <button class="f-btn">Hafızlık</button>
+    <button class="f-btn">Etkinlik</button>
+    <button class="f-btn">Kayıt</button>
+  </div>
+
+  <div class="layout">
+    <main>
+      <div class="ann-list">
+
+        <!-- SINAV BAŞVURU - ÖZEL KART -->
+        <div class="ann-card sinav-card">
+          <div class="sinav-hdr">🎓 5. SINIF KABUL SINAVI · BAŞVURULAR AÇIK</div>
+          <div class="ann-body">
+            <h3>2026 Eğitim Yılı Sınav Başvuruları</h3>
+            <p>Sınav Tarihi: <strong style="color:var(--gold)">17 Mayıs 2026 — Saat 10:00</strong>. Kontenjanlar sınırlıdır; başvuruyu tamamlayın, sınav giriş belgenizi anında alın. Form eksiksiz doldurulmalıdır.</p>
+            <div class="ann-meta">
+              <span>Yönetim · Güncel</span>
+              <a href="/kayit" class="ann-link">BAŞVURU FORMU →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- PİNNED -->
+        <div class="ann-card pinned">
+          <div class="pin-hdr">📌 Sabitlenmiş · Kayıt &amp; Başvuru</div>
+          <div class="ann-body">
+            <h3>2026 Eğitim Yılı Kayıt Başvuruları Açıldı</h3>
+            <p>Yeni eğitim yılı için ön kayıt başvuruları başlamıştır. Kontenjanlar sınırlıdır; erken başvuru için <a href="/kayit" style="color:var(--gold);">kayıt formunu</a> doldurunuz.</p>
+            <div class="ann-meta"><span>Yönetim · 15 Ocak 2026</span><a href="/kayit" class="ann-link">BAŞVUR →</a></div>
+          </div>
+        </div>
+
+        <div class="ann-card">
+          <div class="date-col"><span class="d">12</span><span class="m">Oca</span></div>
+          <div class="ann-body">
+            <span class="ann-tag">Akademik</span>
+            <h3>LGS Hazırlık Deneme Sınavı Maratonu</h3>
+            <p>Yoğunlaştırılmış deneme sınavı takvimi açıklandı. İlk deneme 20 Ocak Pazartesi saat 09:00'da başlayacaktır.</p>
+            <div class="ann-meta"><span>Rehberlik Servisi · 12 Oca</span><a href="#" class="ann-link">DETAY →</a></div>
+          </div>
+        </div>
+
+        <div class="ann-card">
+          <div class="date-col"><span class="d">08</span><span class="m">Oca</span></div>
+          <div class="ann-body">
+            <span class="ann-tag">Etkinlik</span>
+            <h3>Siyer-i Nebi Bilgi Yarışması Başvuruları</h3>
+            <p>"Peygamberimizin Hayatı" temalı okul geneli yarışması için başvurular başladı. Son tarih: 20 Ocak.</p>
+            <div class="ann-meta"><span>Etkinlik Kom. · 8 Oca</span><a href="#" class="ann-link">BAŞVUR →</a></div>
+          </div>
+        </div>
+
+        <div class="ann-card">
+          <div class="date-col"><span class="d">28</span><span class="m">Ara</span></div>
+          <div class="ann-body">
+            <span class="ann-tag">Hafızlık</span>
+            <h3>Kış Dönemi Hıfz Seansları Takvimi</h3>
+            <p>Kış tatilindeki hafızlık seans takvimi güncellendi. Sabah 06:30–07:30, ikindi 15:30–16:30.</p>
+            <div class="ann-meta"><span>Hafızlık Koor. · 28 Ara</span><a href="#" class="ann-link">TAKVİM →</a></div>
+          </div>
+        </div>
+
+        <div class="ann-card">
+          <div class="date-col"><span class="d">20</span><span class="m">Ara</span></div>
+          <div class="ann-body">
+            <span class="ann-tag">Etkinlik</span>
+            <h3>Yıl Sonu Münazara ve Hat Sanatı Sergisi</h3>
+            <p>27 Aralık Cuma saat 14:00'te konferans salonunda gerçekleşecek. Tüm velilerimiz davetlidir.</p>
+            <div class="ann-meta"><span>Okul Yönetimi · 20 Ara</span><a href="#" class="ann-link">DETAY →</a></div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <aside class="sidebar">
+      <div class="widget">
+        <div class="widget-title">Arşiv</div>
+        <div class="arc-row"><span>Ocak 2026</span><span class="arc-cnt">5</span></div>
+        <div class="arc-row"><span>Aralık 2024</span><span class="arc-cnt">8</span></div>
+        <div class="arc-row"><span>Kasım 2024</span><span class="arc-cnt">6</span></div>
+        <div class="arc-row"><span>Ekim 2024</span><span class="arc-cnt">7</span></div>
+        <div class="arc-row"><span>Eylül 2024</span><span class="arc-cnt">4</span></div>
+      </div>
+      <div class="widget">
+        <div class="widget-title">Yaklaşan Etkinlikler</div>
+        <div class="event-row"><div class="ev-date">17<br>MAY</div><div><h5>5. Sınıf Kabul Sınavı</h5><p>10:00 – Ana Sınav Salonu</p></div></div>
+        <div class="event-row"><div class="ev-date">20<br>OCA</div><div><h5>1. LGS Denemesi</h5><p>09:00 – Tüm sınıflar</p></div></div>
+        <div class="event-row"><div class="ev-date">25<br>OCA</div><div><h5>Siyer Yarışması Finali</h5><p>14:00 – Konferans Salonu</p></div></div>
+        <div class="event-row"><div class="ev-date">03<br>ŞUB</div><div><h5>Veli Toplantısı</h5><p>19:00 – Tüm veliler</p></div></div>
+      </div>
+      <div class="widget">
+        <div class="widget-title">Günün Sözü</div>
+        <blockquote>"İlim müminin yitik malıdır, nerede bulursa alsın."</blockquote>
+        <cite>Tirmizi — Hadis-i Şerif</cite>
+      </div>
+    </aside>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand"><strong>NECMETTİN ERBAKAN İMHP</strong><p>"Önce Ahlak ve Maneviyat" düsturunu rehber edinerek nesiller yetiştiriyoruz.</p></div>
+      <div class="footer-col"><h5>Sayfalar</h5><ul><li><a href="/">Anasayfa</a></li><li><a href="/kurumsal.html">Okul Hakkında</a></li><li><a href="/duyuru.html">Duyurular</a></li><li><a href="/iletisim.html">İletişim</a></li></ul></div>
+      <div class="footer-col"><h5>Başvuru</h5><ul><li><a href="/kayit">Kayıt Formu</a></li><li><a href="/admin">Yönetim Paneli</a></li></ul></div>
+      <div class="footer-col"><h5>İletişim</h5><ul><li><a href="#">Selahaddin Eyyubi Mah.</a></li><li><a href="#">+90 (414) 312 70 37</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 NECMETTİN ERBAKAN İMHP</span><span>HALİLİYE / ŞANLIURFA</span></div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.f-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

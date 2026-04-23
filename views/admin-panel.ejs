@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/favicon.ico">
+  <title>Admin Paneli | Necmettin Erbakan İMHP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/site.css">
+  <style>
+    body { background: #04090f; }
+    .layout { display: flex; min-height: 100vh; }
+
+    /* SIDEBAR */
+    aside {
+      width: 240px; flex-shrink: 0;
+      background: #040d18;
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      position: fixed; top: 0; left: 0; height: 100vh;
+      overflow-y: auto; z-index: 100;
+    }
+    .sb-top { padding: 20px 18px 16px; border-bottom: 1px solid var(--border); }
+    .sb-brand { font-family: 'Cinzel', serif; font-size: .82rem; color: var(--gold); letter-spacing: 1px; margin-bottom: 4px; }
+    .sb-sub { font-size: .58rem; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
+    .sb-badge { display: inline-block; background: var(--gold-dim); border: 1px solid var(--border); color: var(--gold); font-size: .58rem; font-weight: 700; padding: 3px 10px; border-radius: 2px; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 8px; }
+
+    .sb-nav { padding: 14px 10px; flex: 1; }
+    .sb-sec { font-size: .55rem; font-weight: 700; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; padding: 4px 10px 8px; margin-top: 8px; opacity: .6; }
+    .sb-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; color: var(--muted); font-size: .75rem; text-decoration: none; transition: .2s; border-radius: 2px; margin-bottom: 2px; }
+    .sb-item:hover, .sb-item.active { background: rgba(201,168,76,.08); color: var(--gold); }
+    .sb-item .ico { font-size: 14px; flex-shrink: 0; }
+
+    .sb-user { padding: 14px 18px; border-top: 1px solid var(--border); }
+    .sb-user .uname { color: var(--text); font-size: .75rem; font-weight: 600; }
+    .sb-user .urole { color: var(--muted); font-size: .65rem; margin-top: 2px; }
+    .sb-logout { display: flex; align-items: center; gap: 6px; margin-top: 10px; color: var(--muted); font-size: .68rem; text-decoration: none; padding: 7px 10px; border: 1px solid var(--border); border-radius: 2px; transition: .2s; }
+    .sb-logout:hover { color: #fca5a5; border-color: rgba(224,40,26,.3); background: rgba(224,40,26,.08); }
+
+    /* MAIN */
+    .main { margin-left: 240px; display: flex; flex-direction: column; flex: 1; min-height: 100vh; }
+
+    .top-bar { background: #040d18; border-bottom: 1px solid var(--border); padding: 0 28px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+    .breadcrumb-nav { display: flex; align-items: center; gap: 8px; font-size: .72rem; color: var(--muted); }
+    .breadcrumb-nav .cur { color: var(--text); font-weight: 600; }
+    .breadcrumb-nav .sep { color: var(--border); }
+    .topbar-badge { background: var(--gold); color: var(--navy); font-size: .68rem; font-weight: 700; padding: 4px 14px; font-family: 'Cinzel', serif; }
+
+    .content { padding: 28px; flex: 1; }
+
+    /* STATS */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin-bottom: 26px; }
+    .stat-card { background: var(--navy-mid); border: 1px solid var(--border); padding: 20px 18px; display: flex; align-items: center; gap: 14px; }
+    .stat-ico { width: 44px; height: 44px; flex-shrink: 0; background: var(--gold-dim); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .stat-val { font-family: 'Cinzel', serif; font-size: 2rem; font-weight: 700; color: var(--white); line-height: 1; }
+    .stat-val.red { color: var(--gold); }
+    .stat-lbl { font-size: .65rem; color: var(--muted); margin-top: 3px; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* TOOLBAR */
+    .toolbar { background: var(--navy-mid); border: 1px solid var(--border); padding: 14px 16px; margin-bottom: 16px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .search-wrap { flex: 1; min-width: 200px; display: flex; align-items: center; gap: 8px; background: var(--navy); border: 1px solid var(--border); padding: 8px 12px; }
+    .search-wrap input { border: none; background: transparent; outline: none; font-family: 'Poppins', sans-serif; font-size: .78rem; width: 100%; color: var(--text); }
+    .search-wrap input::placeholder { color: var(--muted); }
+    .filter-sel { padding: 8px 12px; border: 1px solid var(--border); background: var(--navy); color: var(--text); font-family: 'Poppins', sans-serif; font-size: .72rem; outline: none; cursor: pointer; }
+    .filter-sel option { background: var(--navy-mid); }
+    .export-btn { padding: 8px 16px; background: var(--navy-light); color: var(--gold); border: 1px solid var(--border); font-family: 'Cinzel', serif; font-size: .65rem; font-weight: 700; cursor: pointer; transition: .2s; letter-spacing: 1px; }
+    .export-btn:hover { background: var(--gold); color: var(--navy); }
+
+    /* TABLE */
+    .table-card { background: var(--navy-mid); border: 1px solid var(--border); overflow: hidden; }
+    .table-head { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--navy-light); }
+    .table-head h3 { font-family: 'Cinzel', serif; font-size: .82rem; color: var(--gold); }
+    .table-head .cnt { font-size: .68rem; color: var(--muted); }
+
+    .tbl-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 900px; }
+    thead tr { background: var(--navy-light); border-bottom: 1px solid var(--border); }
+    thead th { padding: 11px 12px; text-align: left; color: var(--gold); font-size: .62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; font-family: 'Cinzel', serif; }
+    tbody tr { border-bottom: 1px solid rgba(201,168,76,.07); transition: background .15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(201,168,76,.04); }
+    tbody tr.gizli { display: none; }
+    tbody td { padding: 11px 12px; font-size: .78rem; color: var(--text); vertical-align: middle; }
+
+    .no-badge { display: inline-block; background: var(--gold-dim); color: var(--gold); font-size: .65rem; font-weight: 700; padding: 2px 8px; font-family: 'Cinzel', serif; letter-spacing: .5px; }
+    .tc-cell { font-family: monospace; font-size: .72rem; color: var(--muted); letter-spacing: .5px; }
+    .salon-badge { font-family: 'Cinzel', serif; font-size: .75rem; font-weight: 700; color: var(--gold); }
+    .pdf-btn { display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px; background: var(--navy-light); color: var(--text); border: 1px solid var(--border); font-size: .65rem; font-weight: 600; text-decoration: none; transition: .2s; }
+    .pdf-btn:hover { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+    .del-btn { display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px; background: transparent; color: var(--muted); border: 1px solid var(--border); font-size: .65rem; font-weight: 600; cursor: pointer; transition: .2s; font-family: 'Poppins', sans-serif; }
+    .del-btn:hover { background: rgba(224,40,26,.1); color: #f87171; border-color: rgba(224,40,26,.3); }
+    .btn-grp { display: flex; gap: 4px; }
+
+    .empty-state { text-align: center; padding: 60px 20px; }
+    .empty-state .ico { font-size: 40px; margin-bottom: 14px; opacity: .5; }
+    .empty-state h3 { font-family: 'Cinzel', serif; color: var(--gold); font-size: 1rem; margin-bottom: 6px; }
+    .empty-state p { color: var(--muted); font-size: .8rem; }
+
+    .table-foot { padding: 12px 18px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; font-size: .68rem; color: var(--muted); background: var(--navy-light); }
+    .sinav-pill { display: inline-flex; align-items: center; gap: 6px; background: var(--gold-dim); color: var(--gold); border: 1px solid var(--border); padding: 3px 12px; font-size: .62rem; font-weight: 700; font-family: 'Cinzel', serif; letter-spacing: .5px; }
+
+    /* DELETE MODAL */
+    .modal-overlay { display: none; position: fixed; inset: 0; z-index: 999; background: rgba(0,0,0,.7); backdrop-filter: blur(4px); align-items: center; justify-content: center; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--navy-mid); border: 1px solid var(--border); padding: 32px; max-width: 360px; width: 90%; text-align: center; }
+    .modal h3 { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--gold); margin-bottom: 12px; }
+    .modal p { font-size: .82rem; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
+    .modal p strong { color: var(--text); }
+    .modal-btns { display: flex; gap: 10px; }
+    .modal-cancel { flex: 1; padding: 11px; border: 1px solid var(--border); background: transparent; color: var(--muted); font-family: 'Poppins', sans-serif; font-size: .8rem; font-weight: 600; cursor: pointer; transition: .2s; }
+    .modal-cancel:hover { border-color: var(--gold); color: var(--text); }
+    .modal-confirm { flex: 1; padding: 11px; border: none; background: var(--red); color: #fff; font-family: 'Cinzel', serif; font-size: .8rem; font-weight: 700; cursor: pointer; transition: .2s; letter-spacing: 1px; }
+    .modal-confirm:hover { background: #c0201c; }
+
+    @media (max-width: 900px) { aside { transform: translateX(-100%); } .main { margin-left: 0; } }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside>
+    <div class="sb-top">
+      <div class="sb-brand">NECMETTİN ERBAKAN</div>
+      <div class="sb-sub">İmam Hatip Ortaokulu</div>
+      <span class="sb-badge">Admin Paneli</span>
+    </div>
+
+    <nav class="sb-nav">
+      <div class="sb-sec">Yönetim</div>
+      <a class="sb-item active" href="/admin/panel"><span class="ico">👥</span> Kayıt Listesi</a>
+      <a class="sb-item" href="/kayit" target="_blank"><span class="ico">📋</span> Kayıt Formu</a>
+      <div class="sb-sec" style="margin-top:12px;">Site</div>
+      <a class="sb-item" href="/" target="_blank"><span class="ico">🏠</span> Ana Sayfa</a>
+      <a class="sb-item" href="/duyuru.html" target="_blank"><span class="ico">📣</span> Duyurular</a>
+    </nav>
+
+    <div class="sb-user">
+      <div class="uname">👤 <%= adminAd %></div>
+      <div class="urole">Sistem Yöneticisi</div>
+      <a href="/admin/cikis" class="sb-logout">🚪 Çıkış Yap</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="top-bar">
+      <div class="breadcrumb-nav">
+        <span>Admin</span>
+        <span class="sep">›</span>
+        <span class="cur">Kayıt Yönetimi</span>
+      </div>
+      <span class="topbar-badge" id="toplamSayi"><%= kayitlar.length %> Kayıt</span>
+    </div>
+
+    <div class="content">
+
+      <!-- STATS -->
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-ico">📋</div><div><div class="stat-val"><%= kayitlar.length %></div><div class="stat-lbl">Toplam Başvuru</div></div></div>
+        <div class="stat-card"><div class="stat-ico">✅</div><div><div class="stat-val"><%= kayitlar.length %></div><div class="stat-lbl">Onaylı Kayıt</div></div></div>
+        <div class="stat-card"><div class="stat-ico">📅</div><div><div class="stat-val <%= kalanGun<=7?'red':'' %>"><%= kalanGun %></div><div class="stat-lbl">Sınava Gün Kaldı</div></div></div>
+        <div class="stat-card"><div class="stat-ico">🏫</div><div><div class="stat-val"><%= new Set(kayitlar.map(k=>k.sinifNo)).size||0 %></div><div class="stat-lbl">Aktif Salon</div></div></div>
+      </div>
+
+      <!-- TOOLBAR -->
+      <div class="toolbar">
+        <div class="search-wrap">
+          🔍
+          <input type="text" id="aramaInput" placeholder="Ad, soyad, TC veya ilkokul ile ara..." oninput="filtrele()" />
+        </div>
+        <select class="filter-sel" id="ilceFilter" onchange="filtrele()">
+          <option value="">Tüm İlçeler</option>
+          <% [...new Set(kayitlar.map(k=>k.ilce))].sort().forEach(ilce=>{ %>
+            <option value="<%= ilce %>"><%= ilce %></option>
+          <% }); %>
+        </select>
+        <button class="export-btn" onclick="csvIndir()">⬇ CSV İNDİR</button>
+      </div>
+
+      <!-- TABLE -->
+      <div class="table-card">
+        <div class="table-head">
+          <h3>Kayıtlı Öğrenciler</h3>
+          <span class="cnt" id="gosterilen"><%= kayitlar.length %> kayıt gösteriliyor</span>
+        </div>
+
+        <% if (kayitlar.length === 0) { %>
+          <div class="empty-state">
+            <div class="ico">📭</div>
+            <h3>Kayıt Bulunamadı</h3>
+            <p>Henüz hiçbir başvuru yapılmamıştır.</p>
+          </div>
+        <% } else { %>
+          <div class="tbl-wrap">
+            <table id="kayitTablosu">
+              <thead>
+                <tr>
+                  <th>#</th><th>Kayıt No</th><th>Ad Soyad</th><th>TC Kimlik</th>
+                  <th>Doğum T.</th><th>İlkokul</th><th>İlçe</th><th>Telefon</th>
+                  <th>Salon/Sıra</th><th>Kayıt Tarihi</th><th>İşlem</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% kayitlar.forEach((k,i)=>{ %>
+                  <tr class="kayit-satir"
+                    data-ad="<%= (k.ad+' '+k.soyad).toLowerCase() %>"
+                    data-tc="<%= k.tc %>"
+                    data-ilce="<%= (k.ilce||'').toLowerCase() %>"
+                    data-ilkokul="<%= (k.ilkokul_adi||'').toLowerCase() %>">
+                    <td style="color:var(--muted);font-size:.72rem;"><%= i+1 %></td>
+                    <td><span class="no-badge"><%= k.kayitNo %></span></td>
+                    <td><strong><%= k.ad %> <%= k.soyad %></strong></td>
+                    <td class="tc-cell"><%= k.tc %></td>
+                    <td style="font-size:.72rem;white-space:nowrap;"><%= k.dogumTarihiGoster %></td>
+                    <td style="font-size:.72rem;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="<%= k.ilkokul_adi %>"><%= k.ilkokul_adi||'-' %></td>
+                    <td style="font-size:.72rem;"><%= k.ilce %></td>
+                    <td style="font-size:.72rem;white-space:nowrap;"><%= k.telefon||'-' %></td>
+                    <td><span class="salon-badge">S<%= k.sinifNo %>/<%= String(k.siraNo).padStart(3,'0') %></span></td>
+                    <td style="font-size:.65rem;color:var(--muted);white-space:nowrap;"><%= k.kayitTarihi %></td>
+                    <td>
+                      <div class="btn-grp">
+                        <a href="/pdf/<%= k.id %>" class="pdf-btn" download>⬇ PDF</a>
+                        <button class="del-btn" onclick="silConfirm('<%= k.id %>','<%= k.ad %> <%= k.soyad %>')">🗑</button>
+                      </div>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-foot">
+            <span id="filtreInfo">Toplam <%= kayitlar.length %> kayıt</span>
+            <span class="sinav-pill">📅 17 Mayıs 2026 — Saat 10:00</span>
+          </div>
+        <% } %>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- DELETE MODAL -->
+<div class="modal-overlay" id="delModal">
+  <div class="modal">
+    <h3>Kaydı Sil</h3>
+    <p><strong id="delName"></strong> adlı öğrencinin kaydı silinecektir. Bu işlem geri alınamaz.</p>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="kapatModal()">İptal</button>
+      <form id="delForm" method="POST" style="flex:1;">
+        <button type="submit" class="modal-confirm" style="width:100%;">SİL</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+const satirlar = document.querySelectorAll('.kayit-satir');
+
+function filtrele() {
+  const q  = document.getElementById('aramaInput').value.toLowerCase();
+  const ilce = (document.getElementById('ilceFilter')?.value||'').toLowerCase();
+  let n = 0;
+  satirlar.forEach(s => {
+    const m = (s.dataset.ad||'').includes(q)||(s.dataset.tc||'').includes(q)||(s.dataset.ilkokul||'').includes(q);
+    const i = !ilce||(s.dataset.ilce||'')===ilce;
+    s.classList.toggle('gizli', !(m&&i));
+    if(m&&i)n++;
+  });
+  document.getElementById('toplamSayi').textContent = n+' Kayıt';
+  const info=document.getElementById('gosterilen'); if(info) info.textContent=n+' kayıt gösteriliyor';
+  const fi=document.getElementById('filtreInfo'); if(fi) fi.textContent=n+' kayıt filtrelendi';
+}
+
+function csvIndir(){
+  const baslik=['Sıra','Kayıt No','Ad','Soyad','TC','Doğum','İlkokul','İlçe','Tel','Salon','Kayıt T.'];
+  const rows=Array.from(document.querySelectorAll('.kayit-satir:not(.gizli)'));
+  const veri=rows.map(s=>{
+    const td=s.querySelectorAll('td');
+    const [ad,...soy]=td[2].textContent.trim().split(' ');
+    return [td[0].textContent.trim(),td[1].textContent.trim(),ad,soy.join(' '),td[3].textContent.trim(),td[4].textContent.trim(),td[5].title||td[5].textContent.trim(),td[6].textContent.trim(),td[7].textContent.trim(),td[8].textContent.trim(),td[9].textContent.trim()];
+  });
+  const csv=[baslik,...veri].map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'}));
+  a.download='kayitlar-'+new Date().toLocaleDateString('tr-TR').replace(/\./g,'-')+'.csv';
+  a.click();
+}
+
+function silConfirm(id,ad){
+  document.getElementById('delName').textContent=ad;
+  document.getElementById('delForm').action='/admin/sil/'+id;
+  document.getElementById('delModal').classList.add('open');
+}
+function kapatModal(){ document.getElementById('delModal').classList.remove('open'); }
+document.getElementById('delModal').addEventListener('click',function(e){ if(e.target===this)kapatModal(); });
+</script>
+</body>
+</html>
